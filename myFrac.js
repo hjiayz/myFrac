@@ -1,6 +1,7 @@
 /*
 write by hjiayz
 email:hjiayz@163.com,hjiayz@gmail.com
+copyleft:LGPLv3
 */
 //Improper Fraction object
 var myFrac={};
@@ -50,11 +51,11 @@ myFrac.OmyFrac.prototype.toString=function() {
 }
 //Out to TeX type:string
 myFrac.OmyFrac.prototype.toTeX=function() {
-	return "\\\\frac{"+this.num.toString()+"}{"+this.deno.toString()+"}";
+	return "\\frac{"+this.num.toString()+"}{"+this.deno.toString()+"}";
 }
 //Out to MathMl type:string
 myFrac.OmyFrac.prototype.toMathMl=function() {
-	return "<mfrac><mrow>"+this.num.toString()+"</mrow><mrow>"+this.deno.toString()+"</mrow></mfrac>";
+	return "<mfrac><mn>"+this.num.toString()+"</mn><mn>"+this.deno.toString()+"</mn></mfrac>";
 }
 //output object type:choose
 myFrac.OmyFrac.prototype.O=function(outype) {
@@ -187,7 +188,7 @@ myFrac.CBE=function(expression){
 //check expression and do CBE
 myFrac.CBEsafe=function(expression){
 	if (expression.search(/[^0-9\+\-\*\/\(\)]/)>-1) {throw "forbidden character!";return false;}
-	if (expression.search(/(^[\+\-\*\/]{1,1})|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}$)/)>-1) {throw("improper expression!");return false;}
+	if (expression.search(/(^[\+\-\*\/\)]{1,1})|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/\(]{1,1}$)/)>-1) {throw("improper expression!");return false;}
 	return myFrac.CBE(expression);
 }
-exports.load = myFrac;
+try {exports.load = myFrac;}catch(e){}
