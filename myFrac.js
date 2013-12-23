@@ -26,9 +26,6 @@ myFrac.OmyFrac=function(num,deno,Propered){
 myFrac.OmyFrac.prototype.getNum=function() {
 	return this.num;
 }
-myFrac.OmyFrac.prototype.gcd=function() {
-	return GCD;
-}
 //get denominator type:number(integer)
 myFrac.OmyFrac.prototype.getDeno=function() {
 	return this.deno;
@@ -68,8 +65,8 @@ myFrac.OmyFrac.prototype.O=function(outype) {
 	switch (outype) {
 		case "Num":return this.Num();break;
 		case "Deno":return this.Deno();break;
-		case "Integer":return this.Integer();break;
-		case "Proper":return this.Proper();break;
+		case "Integer":return this.getInteger();break;
+		case "Proper":return this.getProper();break;
 		case "Float":return this.toFloat();break;
 		case "String":return this.toString();break;
 		case "TeX":return this.toTeX();break;
