@@ -2,7 +2,7 @@
 write by hjiayz
 email:hjiayz@163.com,hjiayz@gmail.com
 copyleft:LGPLv3
-*/
+\*/
 //Improper Fraction object
 var myFrac={};
 //create myFrac Object Original
@@ -223,20 +223,25 @@ myFrac.CBEsafe=function(expression,priority){
                         }
 					}
 					else {
-                        while (!isNaN(exp[myp2+mod])) {         
+                        while (!isNaN(exp[myp2+mod])) {
                                 myp2=myp2+mod;
                         }
 					}
 					return myp2;
 				}
-			var myp=exp.search(/[\*\/]/);
+			var myp=exp.search(/[\*\/](?![\\])/);
+			console.log(myp);
 			if (myp==-1) {return exp;}
 			var myleft=bracket(')');
 			var myright=bracket('(');
-			var myend="";
-			if (myright<(exp.length-1)) {myend=arguments.callee(exp.substring(myright+1));}
-			if ((exp[myleft-1]=="(")&&(exp[myright+1]==")")) {return exp.substring(0,myright+1)+myend;}
-			return exp.substring(0,myleft)+'('+exp.substring(myleft,myright+1)+')'+myend;
+			var outexp;
+			if ((exp[myleft-1]=="(")&&(exp[myright+1]==")")) {
+				outexp=arguments.callee(exp.substring(0,myp+1)+'\\'+exp.substring(myp+1));
+			}
+			else {
+				outexp=arguments.callee(exp.substring(0,myleft)+'('+exp.substring(myleft,myp+1)+'\\'+exp.substring(myp+1,myright+1)+')'+exp.substring(myright+1));
+			}
+			return outexp.replace(/[\\]/,'');
 		}
 		return myFrac.CBE(addbracket(expression));	
 	}
