@@ -5,6 +5,7 @@
 	body {background-color:#dddddd;}
 	div {text-align:center;}
 </style>
+
 <script>
 //modfiy by MathJax/test/sample-dynamic-2.html	
 	
@@ -87,7 +88,7 @@ Preview.callback.autoReset = true;  // make sure it can run more than once
 </script>
 <script>
 function main() {
-	doit(document.getElementById("expression").value,document.getElementById("outype").value)
+	doit(document.getElementById("expression").value,document.getElementById("outype").value);
 }
 function doit(expression,outype) {
 	try {
@@ -117,8 +118,17 @@ function showit(id){
 	document.getElementById(id).style.display="block";
 }
 </script>
+
+<script>
+	function upkey (e){
+		if(!e) {e = window.event};
+		if((e.keyCode || e.which) == 13){
+			main();
+		}
+	}
+</script>
 <body>
-<div id="i" style="display: block;">expression:<input id="expression" type="text"><select id='outype'><option value='MathMl' >MathMl</option><option value='TeX'>TeX</option><option value="Float">Number</option><option value="String">String</option></select><input type="button" value="OK" onclick="main()"></div>
+<div id="i" style="display: block;">expression:<input id="expression" type="text" onkeyup='upkey(event)'><select id='outype'><option value='MathMl' >MathMl</option><option value='TeX'>TeX</option><option value="Float">Number</option><option value="String">String</option></select><input type="button" value="OK" onclick="main()"></div>
 <div id="o2" style="display: none;"></div>
 <div id="o" style="display: block;"></div>
 <input id="MathPreview" type="hidden" value="">
@@ -126,5 +136,8 @@ function showit(id){
 <script>
 Preview.Init();
 </script>
+<div style="display: block;">copyleft GPLv3.write by hjiayz.</div>
+<div>mail:<a href="mailto:hjiayz@gmail.com">hjiayz@gmail.com</a></div>
+<div>github:<a href="https://github.com/hjiayz/myFrac">https://github.com/hjiayz/myFrac</a></div>
 </body>
 </html>

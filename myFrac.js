@@ -6,14 +6,20 @@ copyleft:LGPLv3
 //Improper Fraction object
 var myFrac={};
 //create myFrac Object Original
-myFrac.OmyFrac=function(num,deno){
+myFrac.OmyFrac=function(num,deno,Propered){
 	if (num>9007199254740991) {throw "numerator too big!";}
 	if (deno>9007199254740991) {throw "denominator too big!";}
-	var GCD=myFrac.GCD(num,deno)
-	//set numerator
-	this.num=num/GCD
-	//set denominator
-	this.deno=deno/GCD;
+	if (Propered!=true) {
+		var GCD=myFrac.GCD(num,deno);
+		//set numerator
+		this.num=num/GCD;
+		//set denominator
+		this.deno=deno/GCD;
+	}
+	else {
+		this.num=num;
+		this.deno=deno;
+	}
 	if (this.deno<0) {this.deno=-this.deno;this.num=-this.num;}
 }
 //get numerator type:number(integer)
@@ -31,7 +37,7 @@ myFrac.OmyFrac.prototype.isProper=function() {
 	return this.num<this.deno;
 }
 myFrac.OmyFrac.prototype.isInteger=function() {
-	return (this.num%this.deno==0);
+	return (this.deno==1);
 }
 //get integer part type:number(integer)
 myFrac.OmyFrac.prototype.getInteger=function() {
@@ -69,7 +75,7 @@ myFrac.OmyFrac.prototype.O=function(outype) {
 		case "TeX":return this.toTeX();break;
 		case "MathMl":return this.toMathMl();break;
 	}
-	return "unknow type";
+	throw "unknow type";
 };
 //finish create object
 myFrac.C=function (num,deno){
@@ -126,7 +132,7 @@ myFrac.sub=function(a,b) {
 myFrac.mul=function(a,b) {
 	var GCDa=myFrac.GCD(a.num,b.deno);
 	var GCDb=myFrac.GCD(b.num,a.deno);
-	return myFrac.C((a.num/GCDa)*(b.num/GCDb),(a.deno/GCDb)*(b.deno/GCDa));
+	return myFrac.C((a.num/GCDa)*(b.num/GCDb),(a.deno/GCDb)*(b.deno/GCDa),true);
 }
 //division
 myFrac.div=function(a,b) {
@@ -134,7 +140,7 @@ myFrac.div=function(a,b) {
 	var GCDdeno=myFrac.GCD(b.deno,a.deno);
 	var DIVRdeno=(a.deno/GCDdeno)*(b.num/GCDnum);
 	if (DIVRdeno==0) {throw "DIV ZERO!";}
-	return myFrac.C((a.num/GCDnum)*(b.deno/GCDdeno),DIVRdeno);
+	return myFrac.C((a.num/GCDnum)*(b.deno/GCDdeno),DIVRdeno,true);
 }
 //create by expression support () but +-*/ no priority
 myFrac.CBE=function(expression){
@@ -147,7 +153,7 @@ myFrac.CBE=function(expression){
 		var OP=function(lef,rig,op){
 			var ri;
 			if (typeof(rig)=="string") {
-				if ((rig.indexOf(".")>-1)||(isNaN(rig))) {throw "Not Integer!";}
+				if ((rig.indexOf(".")>-1)||(isNaN(rig))) {throw rig+"is Not Integer!";}
 				ri=myFrac.C(rig,1);
 			}
 			else {
@@ -171,7 +177,13 @@ myFrac.CBE=function(expression){
 			}
 			else {
 				if (expression[mypoint]=="(") {
-					mypend=expression.lastIndexOf(")");
+					var Bracket=1;
+					mypend=mypoint;
+					while (Bracket>0) {
+						mypend++;
+						if (expression[mypend]=="(") {Bracket++;}
+						if (expression[mypend]==")") {Bracket--;}
+					}
 					right=arguments.callee(expression.substring(mypoint+1,mypend));
 					mypoint=mypend+1;
 				}
@@ -185,10 +197,49 @@ myFrac.CBE=function(expression){
 		return left;
 	}
 
-//check expression and do CBE
-myFrac.CBEsafe=function(expression){
+//check expression and do CBE，give * / more priority
+myFrac.CBEsafe=function(expression,priority){
 	if (expression.search(/[^0-9\+\-\*\/\(\)]/)>-1) {throw "forbidden character!";return false;}
 	if (expression.search(/(^[\+\-\*\/\)]{1,1})|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/\(]{1,1}$)/)>-1) {throw("improper expression!");return false;}
+	
+	//if priority not false, up * / priority
+	if (!(priority===false)) {
+			var addbracket=function(exp) {
+				var bracket=function(char) {
+					if (char==')') {mod=-1;}
+					if (char=='(') {mod=1;}
+					myp2=myp+mod;
+					if (exp[myp2]==char) {
+                        var lv=1;
+                        
+                        while (lv>0) {
+                                myp2=myp2+mod;
+                                if (exp[myp2]==')') {
+                                        lv=lv-mod;
+                                }
+                                if (exp[myp2]=='(') {
+                                        lv=lv+mod;
+                                }
+                        }
+					}
+					else {
+                        while (!isNaN(exp[myp2+mod])) {         
+                                myp2=myp2+mod;
+                        }
+					}
+					return myp2;
+				}
+			var myp=exp.search(/[\*\/]/);
+			if (myp==-1) {return exp;}
+			var myleft=bracket(')');
+			var myright=bracket('(');
+			var myend="";
+			if (myright<(exp.length-1)) {myend=arguments.callee(exp.substring(myright+1));}
+			if ((exp[myleft-1]=="(")&&(exp[myright+1]==")")) {return exp.substring(0,myright+1)+myend;}
+			return exp.substring(0,myleft)+'('+exp.substring(myleft,myright+1)+')'+myend;
+		}
+		return myFrac.CBE(addbracket(expression));	
+	}
 	return myFrac.CBE(expression);
 }
 try {exports.load = myFrac;}catch(e){}
