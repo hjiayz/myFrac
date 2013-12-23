@@ -196,9 +196,10 @@ myFrac.CBE=function(expression){
 
 //check expression and do CBE，give * / more priority
 myFrac.CBEsafe=function(expression,priority){
+	//add zero before Negative sign example:(-1) to (0-1)
+	expression=expression.replace(/(\()(\-[0-9]+)(\))/g,'(0$2)');
 	if (expression.search(/[^0-9\+\-\*\/\(\)]/)>-1) {throw "forbidden character!";return false;}
 	if (expression.search(/(^[\+\-\*\/\)]{1,1})|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/\(]{1,1}$)/)>-1) {throw("improper expression!");return false;}
-	
 	//if priority not false, up * / priority
 	if (!(priority===false)) {
 			var addbracket=function(exp) {
