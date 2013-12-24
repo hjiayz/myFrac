@@ -10,7 +10,12 @@ myFrac.OmyFrac=function(num,deno,Propered){
 	if (num>9007199254740991) {throw "numerator too big!";}
 	if (deno>9007199254740991) {throw "denominator too big!";}
 	if (Propered!=true) {
-		var GCD=myFrac.GCD(num,deno);
+		if ((num>2147483648)||(deno>2147483648)) {
+			var GCD=myFrac.GCDbignum(num,deno);
+		}
+		else {
+			var GCD=myFrac.GCD(num,deno);
+		}
 		//set numerator
 		this.num=num/GCD;
 		//set denominator
@@ -82,7 +87,9 @@ myFrac.C=function (num,deno){
 
 	return new myFrac.OmyFrac(num,deno);
 }
-
+myFrac.GCDbignum=function(a,b){
+	throw "numerator too big!";
+}
 //get GCD
 myFrac.GCD=function(a,b) {
     if (a<0) {a=-a;}
@@ -200,7 +207,7 @@ myFrac.CBE=function(expression){
 //check expression and do CBE，give * / more priority
 myFrac.CBEsafe=function(expression,priority){
 	//convert float number to division
-	expression=expression.replace(/([0-9]*)\.([0-9]*)/g,function(num,high,low){return '('+high.replace(/^[0]+/,'')+low+'/1'+low.replace(/[0-9]/g,'0')+')';});
+	expression=expression.replace(/([0-9]*)\.([0-9]*)/g,function(num,high,low){return '('+high.replace(/^[0]+/,'')+low.replace()+'/1'+low.replace(/[0-9]/g,'0')+')';});
 	//check forbidden character
 	if (expression.search(/[^0-9\+\-\*\/\(\)]/)>-1) {throw "forbidden character!";return false;}
 	//add zero before Negative sign example:(-1) to (0-1)
