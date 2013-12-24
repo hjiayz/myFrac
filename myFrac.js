@@ -50,14 +50,17 @@ myFrac.OmyFrac.prototype.toFloat=function() {
 }
 //Out to string like numerator/denominator.  type:string
 myFrac.OmyFrac.prototype.toString=function() {
+	if (this.isInteger()) {return this.num.toString();}
 	return this.num+"/"+this.deno;
 }
 //Out to TeX type:string
 myFrac.OmyFrac.prototype.toTeX=function() {
+	if (this.isInteger()) {return "{"+this.num.toString()+"}";}
 	return "\\frac{"+this.num.toString()+"}{"+this.deno.toString()+"}";
 }
 //Out to MathMl type:string
 myFrac.OmyFrac.prototype.toMathMl=function() {
+	if (this.isInteger()) {return "<mn>"+this.num.toString()+"</mn>";}
 	return "<mfrac><mn>"+this.num.toString()+"</mn><mn>"+this.deno.toString()+"</mn></mfrac>";
 }
 //output object type:choose
