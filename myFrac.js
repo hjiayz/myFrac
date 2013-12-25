@@ -238,7 +238,7 @@ myFrac.CBE=function(expression){
 //check expression and do CBE，give * / more priority
 myFrac.CBEsafe=function(expression,priority){
 	//convert float number to division
-	expression=expression.replace(/([0-9]*)\.([0-9]*)/g,function(num,high,low){return '('+high.replace(/^[0]+/,'')+low.replace()+'/1'+low.replace(/[0-9]/g,'0')+')';});
+	expression=expression.replace(/([0-9]*)\.([0-9]*)/g,function(num,high,low){var nozero=low.replace(/[0]+$/,'');return '('+high.replace(/^[0]+/,'')+nozero+'/1'+nozero.replace(/[0-9]/g,'0')+')';});
 	//check forbidden character
 	if (expression.search(/[^0-9\+\-\*\/\(\)]/)>-1) {throw "forbidden character!";return false;}
 	//add zero before Negative sign example:(-1) to (0-1)
