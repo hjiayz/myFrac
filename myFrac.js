@@ -10,12 +10,7 @@ myFrac.OmyFrac=function(num,deno,Propered){
 	if (num>9007199254740991) {throw "numerator too big!";}
 	if (deno>9007199254740991) {throw "denominator too big!";}
 	if (Propered!=true) {
-		if ((num>2147483648)||(deno>2147483648)) {
-			var GCD=myFrac.GCDbignum(num,deno);
-		}
-		else {
-			var GCD=myFrac.GCD(num,deno);
-		}
+		var GCD=myFrac.GCD(num,deno);
 		//set numerator
 		this.num=num/GCD;
 		//set denominator
@@ -87,11 +82,47 @@ myFrac.C=function (num,deno){
 
 	return new myFrac.OmyFrac(num,deno);
 }
-myFrac.GCDbignum=function(a,b){
-	throw "numerator too big!";
+//get GCD for bignum(2147483648~9007199254740991)
+myFrac.GCDbignum=function(a,b) {
+	var czero=function(number) {
+		var Snumber=number.toString(2);
+		return Snumber[Snumber.length-1]=='0';
+	}
+    if (a<0) {a=-a;}
+    if (b<0) {b=-b;}
+    if ((a==1)||(b==1)) {return 1;}
+    var c=0;
+    while ((czero(a))&&(czero(b))) {
+        a=a/2;
+        b=b/2;
+        c=c+1;
+    }
+    var steincore=function(a,b){
+        if (a == 0) {return b;}
+    	if (b == 0) {return a;}
+        while (czero(a)) {
+            a=a/2;
+        }
+        if (a<b) {
+            b=(b-a)/2;
+            return arguments.callee(b,a);
+        }
+        else {
+            a=(a-b)/2;
+            return arguments.callee(a,b);
+        } 
+    }
+    if (czero(a)) {
+        a=a/2;
+        return steincore(a,b)*Math.pow(2,c);
+    }
+    else {
+        return steincore(b,a)*Math.pow(2,c);
+    }
 }
 //get GCD
 myFrac.GCD=function(a,b) {
+	if ((a>2147483648)||(b>2147483648)) {return myFrac.GCDbignum(a,b);}
     if (a<0) {a=-a;}
     if (b<0) {b=-b;}
     if ((a==1)||(b==1)) {return 1;}
@@ -242,7 +273,6 @@ myFrac.CBEsafe=function(expression,priority){
 					return myp2;
 				}
 			var myp=exp.search(/[\*\/](?![\\])/);
-			console.log(myp);
 			if (myp==-1) {return exp;}
 			var myleft=bracket(')');
 			var myright=bracket('(');
