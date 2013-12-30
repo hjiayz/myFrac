@@ -86,7 +86,7 @@ myFrac.C=function (num,deno){
 myFrac.GCDbignum=function(a,b) {
 	var czero=function(number) {
 		var Snumber=number.toString(2);
-		return Snumber[Snumber.length-1]=='0';
+		return Snumber.charAt(Snumber.length-1)=='0';
 	}
     if (a<0) {a=-a;}
     if (b<0) {b=-b;}
@@ -207,26 +207,27 @@ myFrac.CBE=function(expression){
 			return "err";
 		}
 		while (mypoint<expression.length) {
-			if (expression[mypoint].search(/[\+\-\*\/]/)==0) {
+			if (expression.charAt(mypoint).search(/[\+\-\*\/]/)==0) {
 				left=OP(left,right,operator);
 				right="";
-				operator=expression[mypoint];
+				operator=expression.charAt(mypoint);
+				console.log(operator);
 				mypoint++;
 			}
 			else {
-				if (expression[mypoint]=="(") {
+				if (expression.charAt(mypoint)=="(") {
 					var Bracket=1;
 					mypend=mypoint;
 					while (Bracket>0) {
 						mypend++;
-						if (expression[mypend]=="(") {Bracket++;}
-						if (expression[mypend]==")") {Bracket--;}
+						if (expression.charAt(mypend)=="(") {Bracket++;}
+						if (expression.charAt(mypend)==")") {Bracket--;}
 					}
 					right=arguments.callee(expression.substring(mypoint+1,mypend));
 					mypoint=mypend+1;
 				}
 				else {
-					right+=expression[mypoint];
+					right=right+expression.charAt(mypoint);
 					mypoint++;
 				}
 			}
@@ -244,7 +245,7 @@ myFrac.CBEsafe=function(expression,priority){
 	//add zero before Negative sign example:(-1) to (0-1)
 	expression=expression.replace(/(\()(\-[0-9]+)(\))/g,'(0$2)');
 	//check improper expression
-	if (expression.search(/(^[\+\-\*\/\)]{1,1})|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/\(]{1,1}$)/)>-1) {throw("improper expression!");return false;}
+	if (expression.search(/(^[\+\-\*\/\)]{1,1})|([0-9]+[\(\)]+[0-9]+)|(\(\))|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/\(]{1,1}$)/)>-1) {throw("improper expression!");return false;}
 	//if priority not false, up * / priority
 	if (!(priority===false)) {
 			var addbracket=function(exp) {
@@ -252,32 +253,35 @@ myFrac.CBEsafe=function(expression,priority){
 					if (char==')') {mod=-1;}
 					if (char=='(') {mod=1;}
 					myp2=myp+mod;
-					if (exp[myp2]==char) {
+					if (exp.charAt(myp2)==char) {
                         var lv=1;
                         
                         while (lv>0) {
                                 myp2=myp2+mod;
-                                if (exp[myp2]==')') {
+                                if (exp.charAt(myp2)==')') {
                                         lv=lv-mod;
                                 }
-                                if (exp[myp2]=='(') {
+                                if (exp.charAt(myp2)=='(') {
                                         lv=lv+mod;
                                 }
                         }
 					}
 					else {
-                        while (!isNaN(exp[myp2+mod])) {
+                        while ((!isNaN(exp.charAt(myp2+mod)))&&(exp.charAt(myp2+mod)!="")) {
                                 myp2=myp2+mod;
                         }
 					}
 					return myp2;
 				}
+				
+			console.log(expression);
 			var myp=exp.search(/[\*\/](?![\\])/);
 			if (myp==-1) {return exp;}
 			var myleft=bracket(')');
 			var myright=bracket('(');
 			var outexp;
-			if ((exp[myleft-1]=="(")&&(exp[myright+1]==")")) {
+			console.log(outexp);
+			if ((exp.charAt(myleft-1)=="(")&&(exp.charAt(myright+1)==")")) {
 				outexp=arguments.callee(exp.substring(0,myp+1)+'\\'+exp.substring(myp+1));
 			}
 			else {
