@@ -211,7 +211,6 @@ myFrac.CBE=function(expression){
 				left=OP(left,right,operator);
 				right="";
 				operator=expression.charAt(mypoint);
-				console.log(operator);
 				mypoint++;
 			}
 			else {
@@ -274,13 +273,11 @@ myFrac.CBEsafe=function(expression,priority){
 					return myp2;
 				}
 				
-			console.log(expression);
 			var myp=exp.search(/[\*\/](?![\\])/);
 			if (myp==-1) {return exp;}
 			var myleft=bracket(')');
 			var myright=bracket('(');
 			var outexp;
-			console.log(outexp);
 			if ((exp.charAt(myleft-1)=="(")&&(exp.charAt(myright+1)==")")) {
 				outexp=arguments.callee(exp.substring(0,myp+1)+'\\'+exp.substring(myp+1));
 			}
