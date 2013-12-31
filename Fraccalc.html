@@ -1,4 +1,7 @@
-<html><head><title>Sample Fraction Calc</title></head>
+<html><head><title>Sample Fraction Calc</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
 <script type="text/javascript" src="./myFrac.js"></script>
 <script type='text/javascript' src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 <style>
@@ -92,9 +95,10 @@ function main() {
 }
 function doit(expression,outype) {
 	try {
+		if ((navigator.userAgent.indexOf('MSIE'))>-1) {outype="TeX";}
 		var r=myFrac.CBEsafe(expression).O(outype);
 		if ((outype=="MathMl")||(outype=="TeX")) {
-			if (outype=="MathMl") {document.getElementById("MathInput").value='<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">'+r+"</math>";}
+			if (outype=="MathMl") {document.getElementById("MathInput").value='<math xmlns="http://www.w3.org/1998/Math/MathML">'+r+"</math>";}
 			if (outype=="TeX") {document.getElementById("MathInput").value='$$'+r+"$$";}
 			showit("o2");
 			Preview.Update();
@@ -128,7 +132,7 @@ function showit(id){
 	}
 </script>
 <body>
-<div id="i" style="display: block;">expression:<input id="expression" type="text" onkeyup='upkey(event)'><select id='outype'><option value='MathMl' >MathMl</option><option value='TeX'>TeX</option><option value="Float">Number</option><option value="String">String</option></select><input type="button" value="OK" onclick="main()"></div>
+<div id="i" style="display: block;">expression:<input id="expression" type="text" onkeyup='upkey(event)'><select id='outype'><option value='TeX'>TeX</option><option value='MathMl' >MathMl</option><option value="Float">Number</option><option value="String">String</option></select><input type="button" value="OK" onclick="main()"></div>
 <div id="o2" style="display: none;"></div>
 <div id="o" style="display: block;"></div>
 <input id="MathPreview" type="hidden" value="">
