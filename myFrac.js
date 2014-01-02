@@ -296,4 +296,7 @@ myFrac.CBEsafe=function(expression,priority){
 	}
 	return myFrac.CBE(expression);
 }
+myFrac.parse=myFrac.CBEsafe;
+myFrac.eval=myFrac.CBEsafe;
+
 try {exports.load = myFrac;}catch(e){}
