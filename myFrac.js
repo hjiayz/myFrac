@@ -59,7 +59,7 @@ myFrac.OmyFrac.prototype.toTeX=function() {
         var tminus="";
         if (tnum<0) {tnum=-tnum;tminus="-"}
 	if (this.isInteger()) {return "{"+this.num.toString()+"}";}
-	return tminus+"{{"+tnum.toString()+"} \\over{"+this.deno.toString()+"}}";
+	return tminus+"{{"+tnum.toString()+"}\\over{"+this.deno.toString()+"}}";
 }
 //Out to MathMl type:string
 myFrac.OmyFrac.prototype.toMathMl=function() {
