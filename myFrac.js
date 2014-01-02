@@ -55,13 +55,19 @@ myFrac.OmyFrac.prototype.toString=function() {
 }
 //Out to TeX type:string
 myFrac.OmyFrac.prototype.toTeX=function() {
+        var tnum=this.num;
+        var tminus="";
+        if (tnum<0) {tnum=-tnum;tminus="-"}
 	if (this.isInteger()) {return "{"+this.num.toString()+"}";}
-	return "\\frac{"+this.num.toString()+"}{"+this.deno.toString()+"}";
+	return tminus+"{{"+tnum.toString()+"}\\over{"+this.deno.toString()+"}}";
 }
 //Out to MathMl type:string
 myFrac.OmyFrac.prototype.toMathMl=function() {
+	var tnum=this.num;
+	var tminus="";
+	if (tnum<0) {tnum=-tnum;tminus="<mo>-</mo>"}
 	if (this.isInteger()) {return "<mn>"+this.num.toString()+"</mn>";}
-	return "<mfrac><mn>"+this.num.toString()+"</mn><mn>"+this.deno.toString()+"</mn></mfrac>";
+	return tminus+"<mfrac><mn>"+tnum.toString()+"</mn><mn>"+this.deno.toString()+"</mn></mfrac>";
 }
 //output object type:choose
 myFrac.OmyFrac.prototype.O=function(outype) {
