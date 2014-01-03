@@ -246,19 +246,19 @@ myFrac.CBEsafe=function(expression,priority){
 	//convert float number to division
 	expression=expression.replace(/([0-9]*)\.([0-9]*)/g,function(num,high,low){var nozero=low.replace(/[0]+$/,'');return '('+high.replace(/^[0]+/,'')+nozero+'/1'+nozero.replace(/[0-9]/g,'0')+')';});
 	//check forbidden character
-	if (expression.search(/[^0-9\+\-\*\/\(\)]/)>-1) {throw "forbidden character!";return false;}
+	if (expression.search(/[^0-9\+\-\*\/\(\)]/)>-1) {throw "forbidden character!";/*return false;*/}
 	//add zero before Negative sign example:(-1) to (0-1)
 	expression=expression.replace(/(\()(\-[0-9]+)(\))/g,'(0$2)');
 	//check improper expression
-	if (expression.search(/(^[\+\-\*\/\)]{1,1})|([0-9]+[\(\)]+[0-9]+)|(\(\))|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/\(]{1,1}$)/)>-1) {throw("improper expression!");return false;}
+	if (expression.search(/(^[\+\-\*\/\)]{1,1})|([0-9]+[\(\)]+[0-9]+)|(\(\))|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/\(]{1,1}$)/)>-1) {throw("improper expression!");/*return false;*/}
 	//if priority not false, up * / priority
 	if (!(priority===false)) {
 			var addbracket=function(exp) {
-				var bracket=function(char) {
-					if (char==')') {mod=-1;}
-					if (char=='(') {mod=1;}
+				var bracket=function(bchar) {
+					if (bchar==')') {mod=-1;}
+					if (bchar=='(') {mod=1;}
 					myp2=myp+mod;
-					if (exp.charAt(myp2)==char) {
+					if (exp.charAt(myp2)==bchar) {
                         var lv=1;
                         
                         while (lv>0) {
