@@ -243,12 +243,13 @@ myFrac.CBE=function(expression){
 
 //check expression and do CBE，give * / more priority
 myFrac.CBEsafe=function(expression,priority){
+	//convert example:-1 to (0-1)
+	expression=expression.replace(/([\+\-\*\/\(\)])(\-[0-9]+[.]?[0-9]*)/g,'($10$2)');
+	expression=expression.replace(/^(\-[0-9]+[.]?[0-9]*)/g,'(0$1)');
 	//convert float number to division
 	expression=expression.replace(/([0-9]*)\.([0-9]*)/g,function(num,high,low){var nozero=low.replace(/[0]+$/,'');return '('+high.replace(/^[0]+/,'')+nozero+'/1'+nozero.replace(/[0-9]/g,'0')+')';});
 	//check forbidden character
 	if (expression.search(/[^0-9\+\-\*\/\(\)]/)>-1) {throw "forbidden character!";/*return false;*/}
-	//add zero before Negative sign example:(-1) to (0-1)
-	expression=expression.replace(/(\()(\-[0-9]+)(\))/g,'(0$2)');
 	//check improper expression
 	if (expression.search(/(^[\+\-\*\/\)]{1,1})|([0-9]+[\(\)]+[0-9]+)|(\(\))|([\(]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/]{1,1}[\)]{1,1})|([\+\-\*\/]{1,1}[\+\-\*\/]{1,1})|([\+\-\*\/\(]{1,1}$)/)>-1) {throw("improper expression!");/*return false;*/}
 	//if priority not false, up * / priority
