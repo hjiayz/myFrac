@@ -96,7 +96,7 @@ function main() {
 function doit(expression,outype) {
 	try {
 		if ((navigator.userAgent.indexOf('MSIE'))>-1) {outype="TeX";}
-		var r=myFrac.CBEsafe(expression).O(outype);
+		var r=myFrac.parse(expression).O(outype);
 		if ((outype=="MathMl")||(outype=="TeX")) {
 			if (outype=="MathMl") {document.getElementById("MathInput").value='<math xmlns="http://www.w3.org/1998/Math/MathML">'+r+"</math>";}
 			if (outype=="TeX") {document.getElementById("MathInput").value='$$'+r+"$$";}
