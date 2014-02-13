@@ -244,8 +244,9 @@ myFrac.CBE=function(expression){
 //check expression and do CBE，give * / more priority
 myFrac.CBEsafe=function(expression,priority){
 	//convert example:-1 to (0-1)
-	expression=expression.replace(/([\+\-\*\/\(\)])(\-[0-9]+[.]?[0-9]*)/g,'($10$2)');
+	expression=expression.replace(/([\+\-\*\/\(\)])(\-[0-9]+[.]?[0-9]*)/g,'$1(0$2)');
 	expression=expression.replace(/^(\-[0-9]+[.]?[0-9]*)/g,'(0$1)');
+	alert(expression);
 	//convert float number to division
 	expression=expression.replace(/([0-9]*)\.([0-9]*)/g,function(num,high,low){var nozero=low.replace(/[0]+$/,'');return '('+high.replace(/^[0]+/,'')+nozero+'/1'+nozero.replace(/[0-9]/g,'0')+')';});
 	//check forbidden character
